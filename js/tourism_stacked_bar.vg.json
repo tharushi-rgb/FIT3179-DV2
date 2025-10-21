@@ -1,0 +1,88 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 350,
+  "title": {
+    "text": "State-by-State Tourism Comparison by Year",
+    "fontSize": 20,
+    "font": "Lato",
+    "fontWeight": 600,
+    "anchor": "start"
+  },
+  "data": {
+    "url": "data/tourism_daytrips.csv"
+  },
+  "mark": {
+    "type": "bar"
+  },
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "title": "Year",
+      "axis": {
+        "labelAngle": 0,
+        "labelFontSize": 13,
+        "titleFontSize": 15
+      }
+    },
+    "y": {
+      "field": "Daytrip_Trips_Thousands",
+      "type": "quantitative",
+      "aggregate": "sum",
+      "title": "Total Daytrip Visits (Thousands)",
+      "axis": {
+        "labelFontSize": 13,
+        "titleFontSize": 15,
+        "format": ",.0f"
+      }
+    },
+    "color": {
+      "field": "State",
+      "type": "nominal",
+      "title": "State/Territory",
+      "scale": {
+        "domain": [
+          "New South Wales",
+          "Victoria",
+          "Queensland",
+          "South Australia",
+          "Western Australia",
+          "Tasmania",
+          "Northern Territory",
+          "Australian Capital Territory"
+        ],
+        "range": [
+          "#e74c3c",
+          "#3498db",
+          "#f39c12",
+          "#2ecc71",
+          "#9b59b6",
+          "#1abc9c",
+          "#e67e22",
+          "#34495e"
+        ]
+      },
+      "legend": {
+        "titleFontSize": 13,
+        "labelFontSize": 11,
+        "orient": "right"
+      }
+    },
+    "order": {
+      "field": "Daytrip_Trips_Thousands",
+      "type": "quantitative",
+      "aggregate": "sum"
+    },
+    "tooltip": [
+      { "field": "State", "type": "nominal", "title": "State/Territory" },
+      { "field": "Year", "type": "ordinal", "title": "Year" },
+      {
+        "field": "Daytrip_Trips_Thousands",
+        "type": "quantitative",
+        "title": "Daytrip Visits",
+        "format": ",.0f"
+      }
+    ]
+  }
+}

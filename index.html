@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Australia's Regional Tourism Renaissance</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.5.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Lato", sans-serif;
+        background: linear-gradient(
+            135deg,
+            rgba(26, 26, 46, 0.95) 0%,
+            rgba(22, 33, 62, 0.95) 100%
+          ),
+          url("https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=1920")
+            center/cover fixed;
+        background-blend-mode: overlay;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3em;
+        margin-bottom: 15px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .header p {
+        font-size: 1.2em;
+        font-weight: 300;
+        max-width: 800px;
+        margin: 0 auto;
+        opacity: 0.9;
+      }
+
+      .container {
+        max-width: 75%;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .section {
+        background: white;
+        margin: 30px auto;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #e74c3c;
+      }
+
+      .section-header {
+        font-family: "Playfair Display", serif;
+        font-size: 2em;
+        color: #1a1a2e;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e74c3c;
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 30px;
+      }
+
+      .grid-item {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      .stat-box {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .stat-box .number {
+        font-size: 3em;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .stat-box .label {
+        font-size: 1.1em;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .insight-box {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+
+      .insight-box h3 {
+        color: #856404;
+        margin-bottom: 10px;
+        font-size: 1.3em;
+      }
+
+      .insight-box p {
+        color: #856404;
+        line-height: 1.8;
+      }
+
+      .text-content {
+        font-size: 1.05em;
+        line-height: 1.8;
+        color: #444;
+      }
+
+      .text-content strong {
+        color: #e74c3c;
+        font-weight: 700;
+      }
+
+      .highlight {
+        background: linear-gradient(120deg, #ffeaa7 0%, #fdcb6e 100%);
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-weight: 600;
+      }
+
+      .viz-container {
+        margin: 30px 0;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .data-source {
+        margin: 40px auto 0 auto;
+        padding: 25px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+      }
+
+      .data-source h3 {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+        color: #1a1a2e;
+      }
+
+      .data-source ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .data-source li {
+        padding: 10px 0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .data-source li:last-child {
+        border-bottom: none;
+      }
+
+      .data-source a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .data-source a:hover {
+        text-decoration: underline;
+      }
+
+      .footer {
+        background: #1a1a2e;
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      .footer p {
+        font-weight: 300;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 1024px) {
+        .grid-container {
+          grid-template-columns: 1fr;
+        }
+
+        .header h1 {
+          font-size: 2.2em;
+        }
+
+        .section {
+          padding: 25px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Australia's Regional Tourism Renaissance</h1>
+      <p>
+        How Northern Territory and Regional Australia Became the Nation's
+        Fastest-Growing Tourism Destinations
+      </p>
+    </div>
+
+    <div class="container">
+      <!-- Introduction Section -->
+      <div class="section">
+        <h2 class="section-header">
+          The Untold Story of Australia's Tourism Recovery
+        </h2>
+        <div class="text-content">
+          <p style="margin-bottom: 20px">
+            When considering Australian tourism, major cities like
+            <strong>Sydney</strong> and <strong>Melbourne</strong> typically
+            dominate discussions. With a combined
+            <strong>963.7 million daytrip visits</strong> between 2019 and 2025,
+            New South Wales and Victoria remain Australia's tourism powerhouses.
+            However, beneath these impressive aggregate numbers lies a more
+            compelling narrative—one of
+            <span class="highlight">extraordinary regional growth</span>,
+            pandemic resilience, and economic transformation.
+          </p>
+          <p style="margin-bottom: 20px">
+            This visualization presents Australian domestic daytrip tourism data
+            from <strong>2019 to 2025</strong>, revealing how regional
+            territories like the <strong>Northern Territory</strong> achieved
+            remarkable growth rates that significantly exceeded their
+            metropolitan counterparts. While major cities recovered from
+            COVID-19 disruptions, regional destinations didn't merely
+            recover—they <strong>thrived</strong>, demonstrating the untapped
+            potential of Australia's regional tourism sector.
+          </p>
+        </div>
+
+        <div class="stat-box">
+          <div class="number">+77%</div>
+          <div class="label">Northern Territory Growth Rate (2019–2025)</div>
+        </div>
+      </div>
+
+      <!-- Map Section -->
+      <div class="section full-width">
+        <h2 class="section-header">Geographic Distribution of Tourism</h2>
+        <div class="text-content" style="margin-bottom: 30px">
+          <p>
+            The choropleth map below displays the <strong>total volume</strong>
+            of domestic daytrip visits across Australian states and territories
+            from 2019 to 2025. Darker red shading indicates higher visit
+            volumes.
+            <strong>New South Wales</strong> (492.6 million visits) and
+            <strong>Victoria</strong> (471.0 million visits) demonstrate clear
+            dominance in absolute numbers, reflecting their large populations
+            and well-established tourism infrastructure.
+          </p>
+        </div>
+        <div class="viz-container" id="vis-map"></div>
+        <div class="insight-box">
+          <h3>🗺️ Key Insight</h3>
+          <p>
+            While NSW and Victoria lead in total volume, this geographic
+            distribution reveals only one dimension of Australia's tourism
+            story. Population-dense states naturally generate more domestic
+            daytrips. The transformative developments are occurring in
+            <strong>growth rates</strong> and
+            <strong>economic value per visitor</strong>—metrics where smaller
+            territories demonstrate exceptional performance.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tourism Trends Over Time Section -->
+      <div class="section full-width">
+        <h2 class="section-header">Tourism Trends Over Time</h2>
+        <div class="text-content" style="margin-bottom: 30px">
+          <p>
+            This line chart illustrates the evolution of domestic daytrip
+            tourism across Australian states from <strong>2019 to 2025</strong>.
+            Each colored line represents a different state or territory,
+            demonstrating how tourism volumes evolved through the COVID-19
+            pandemic and subsequent recovery period.
+          </p>
+        </div>
+        <div class="viz-container" id="vis-trends"></div>
+        <div class="insight-box">
+          <h3>📊 Key Trends</h3>
+          <p style="margin-bottom: 15px">
+            <strong>New South Wales</strong> (red line) and
+            <strong>Victoria</strong> (blue line) maintain the highest absolute
+            tourism volumes throughout the period, consistently attracting 60-80
+            million daytrip visits annually, reflecting their status as
+            Australia's most populous states.
+          </p>
+          <p style="margin-bottom: 15px">
+            The <strong>COVID-19 pandemic impact</strong> is clearly evident in
+            2020-2021, where all states experienced significant declines.
+            However, recovery patterns diverged markedly—some states
+            demonstrated strong rebound trajectories while others showed more
+            gradual recovery paths.
+          </p>
+          <p style="margin-bottom: 15px">
+            <strong>Northern Territory</strong> (orange line) exhibits the most
+            remarkable growth trajectory, increasing from
+            <span class="highlight">551 thousand visits in 2019</span> to
+            <span class="highlight">978 thousand visits in 2025</span>—nearly
+            doubling its tourism volume with a <strong>77.4% increase</strong>,
+            representing the highest growth rate across all Australian states
+            and territories.
+          </p>
+          <p style="margin-bottom: 15px">
+            <strong>Tasmania</strong> (teal line) also demonstrated impressive
+            expansion from 3.97 million to 5.13 million visits (+29.1%), while
+            <strong>Western Australia</strong> (purple line) grew from 22.01
+            million to 27.44 million visits (+24.7%).
+          </p>
+          <p>
+            <strong>Queensland</strong> maintained steady volumes in the 40-50
+            million visits range, while <strong>South Australia</strong> (green
+            line) grew from 12.62 million to 15.75 million visits (+24.8%),
+            demonstrating consistent regional growth patterns.
+          </p>
+        </div>
+      </div>
+
+      <!-- Stacked Bar Chart Section -->
+      <div class="section full-width">
+        <h2 class="section-header">Total Tourism Composition by Year</h2>
+        <div class="text-content" style="margin-bottom: 30px">
+          <p>
+            This <strong>stacked bar chart</strong> demonstrates the
+            part-to-whole relationship of tourism across states for each year.
+            Each colored segment represents a state's proportional contribution
+            to Australia's total domestic daytrip tourism. This visualization
+            idiom effectively illustrates how the overall tourism market
+            recovered from COVID-19 disruptions and how different states'
+            relative contributions evolved over time.
+          </p>
+        </div>
+        <div class="viz-container" id="vis-stacked"></div>
+        <div class="insight-box">
+          <h3>📊 Composition Insight</h3>
+          <p>
+            The total height of each bar represents Australia's aggregate
+            domestic daytrip visits per year. The visualization clearly shows
+            the decline during 2020-2021 (COVID-19 pandemic period) and the
+            subsequent strong recovery trajectory by 2025. NSW (red) and
+            Victoria (blue) consistently dominate the composition, collectively
+            representing more than half of all domestic daytrips, while regional
+            destinations are increasing their proportional share through
+            accelerated growth rates.
+          </p>
+        </div>
+      </div>
+
+      <!-- COVID Recovery Section -->
+      <div class="section full-width">
+        <h2 class="section-header">COVID-19 Recovery Patterns</h2>
+        <div class="text-content" style="margin-bottom: 30px">
+          <p>
+            This indexed multi-line chart normalizes tourism to 2019 baseline
+            levels (<strong>100 = 2019 level</strong>), enabling direct
+            comparison of how different states recovered from COVID-19 pandemic
+            disruptions regardless of their absolute tourism volumes. The
+            <strong>orange line (Northern Territory)</strong> displays the most
+            dramatic upward trajectory, reaching an index of
+            <strong>177 by 2025</strong>, indicating 77% growth above the 2019
+            baseline.
+          </p>
+        </div>
+        <div class="viz-container" id="vis-recovery"></div>
+        <div class="insight-box">
+          <h3>📈 Recovery Insights</h3>
+          <p style="margin-bottom: 15px">
+            <strong>Northern Territory and Tasmania</strong> (orange and teal
+            lines) not only returned to pre-pandemic levels but substantially
+            exceeded them, demonstrating the strongest recovery performance.
+            This indexed visualization reveals that smaller territories achieved
+            proportionally greater growth compared to larger metropolitan
+            states.
+          </p>
+          <p style="margin-bottom: 15px">
+            All states experienced pandemic-related declines below the 100
+            baseline during 2020-2021. However, by 2025, most states surpassed
+            their 2019 baseline levels, with regional destinations leading the
+            recovery. Queensland (blue line) shows a concerning pattern—still
+            below 2019 levels by 2025, suggesting structural challenges or
+            changing visitor preferences.
+          </p>
+          <p>
+            <strong>Western Australia and South Australia</strong> followed
+            strong recovery paths, reaching 125+ on the index, demonstrating
+            effective regional tourism campaigns during the pandemic recovery
+            period.
+          </p>
+        </div>
+      </div>
+
+      <!-- Conclusion Section -->
+      <div class="section">
+        <h2 class="section-header">
+          Implications for Australia's Tourism Future
+        </h2>
+        <div class="text-content">
+          <p style="margin-bottom: 20px">
+            The analysis presented through these four complementary
+            visualizations reveals a clear narrative:
+            <strong
+              >regional Australia is transforming the nation's tourism
+              landscape</strong
+            >. While Sydney and Melbourne remain essential gateways and volume
+            leaders, the <span class="highlight">highest growth rates</span> and
+            most dynamic market expansion are occurring in smaller, regional
+            destinations.
+          </p>
+          <p style="margin-bottom: 20px">
+            The <strong>Northern Territory's</strong> exceptional performance—
+            achieving 77.4% growth in trip volumes—demonstrates that authentic,
+            nature-based, and culturally rich experiences resonate powerfully
+            with domestic tourists, particularly in the post-pandemic era where
+            Australians are rediscovering their own continent's unique
+            offerings.
+          </p>
+          <p style="margin-bottom: 20px">
+            This trend carries significant policy and economic implications:
+          </p>
+          <ul style="margin-left: 20px; margin-bottom: 20px; line-height: 2">
+            <li>
+              <strong>Economic diversification:</strong> Regional economies
+              benefit from increasing tourism revenue streams
+            </li>
+            <li>
+              <strong>Infrastructure investment:</strong> Growing demand
+              justifies enhanced transport connectivity and accommodation
+              capacity
+            </li>
+            <li>
+              <strong>Environmental stewardship:</strong> Sustained success
+              requires careful management of natural and cultural assets
+            </li>
+            <li>
+              <strong>Indigenous tourism:</strong> Aboriginal cultural
+              experiences represent key differentiators for regional
+              destinations
+            </li>
+          </ul>
+          <p>
+            As Australia's tourism sector continues evolving beyond COVID-19,
+            these regional destinations are positioned not merely to recover but
+            to establish themselves as cornerstone components of the national
+            tourism economy. The data presented here demonstrates that the
+            future of Australian tourism extends well beyond traditional
+            metropolitan gateways—it encompasses the diverse landscapes,
+            cultures, and experiences that define the nation's regional
+            territories.
+          </p>
+        </div>
+      </div>
+
+      <!-- Data Sources -->
+      <div class="data-source">
+        <h3>📊 Data Sources & Verification</h3>
+        <ul>
+          <li>
+            <strong>Primary Tourism Data:</strong>
+            <a
+              href="https://www.tra.gov.au/en/domestic/domestic-tourism-results/domestic-tourism-statistics-annual"
+              target="_blank"
+            >
+              Tourism Research Australia (TRA) - Domestic Tourism Statistics
+              2019-2025 (Daytrip Trips, Table 1)
+            </a>
+            — Official government data covering daytrip tourism volumes (in
+            thousands) across all Australian states and territories for seven
+            years (2019-2025).
+          </li>
+          <li>
+            <strong>Geographic Boundaries:</strong>
+            <a
+              href="https://github.com/rowanhogan/australian-states"
+              target="_blank"
+            >
+              Australian States GeoJSON (GitHub: rowanhogan/australian-states)
+            </a>
+            — Simplified state/territory boundaries for choropleth mapping.
+          </li>
+          <li><strong>Visualization Platform:</strong> Vega-Lite v5.5.0</li>
+          <li>
+            <strong>Data Processing:</strong> Growth index calculations (2019
+            baseline = 100) derived from TRA source data to enable normalized
+            recovery comparisons across states.
+          </li>
+        </ul>
+        <p style="margin-top: 20px; font-style: italic; color: #666">
+          All data sources are publicly accessible and verifiable. Growth
+          percentages calculated as: (2025 value - 2019 value) / 2019 value ×
+          100. All visualizations use authentic government data—no synthetic or
+          sample datasets.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Created by Tharushi Tharunya Tennakoon | Student ID: 34715274</p>
+      <p>FIT3179 Data Visualisation 2 | Monash University | October 2025</p>
+      <p style="margin-top: 15px; font-size: 0.9em">
+        Data sources: Tourism Research Australia, GitHub
+        (rowanhogan/australian-states)
+      </p>
+    </div>
+
+    <script>
+      // Embed all visualizations
+      vegaEmbed("#vis-map", "js/tourism_map.vg.json", { actions: false });
+      vegaEmbed("#vis-trends", "js/tourism_trends_line.vg.json", {
+        actions: false,
+      });
+      vegaEmbed("#vis-stacked", "js/tourism_stacked_bar.vg.json", {
+        actions: false,
+      });
+      vegaEmbed("#vis-recovery", "js/tourism_recovery.vg.json", {
+        actions: false,
+      });
+    </script>
+  </body>
+</html>

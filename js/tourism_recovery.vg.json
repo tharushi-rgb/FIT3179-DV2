@@ -1,0 +1,94 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 400,
+  "title": {
+    "text": "COVID-19 Recovery Patterns (2019-2025)",
+    "fontSize": 20,
+    "font": "Roboto",
+    "anchor": "start",
+    "subtitle": "Tourism Recovery Indexed to 2019 Baseline (100 = 2019 level) - Real TRA Data",
+    "subtitleFontSize": 14,
+    "subtitleColor": "#666"
+  },
+  "data": {
+    "url": "data/tourism_growth_index.csv"
+  },
+  "params": [
+    {
+      "name": "stateSelect",
+      "select": {
+        "type": "point",
+        "fields": ["State"]
+      },
+      "bind": "legend"
+    }
+  ],
+  "mark": {
+    "type": "line",
+    "point": true,
+    "strokeWidth": 3
+  },
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "title": "Year",
+      "axis": { "labelAngle": 0 }
+    },
+    "y": {
+      "field": "Trips_Index",
+      "type": "quantitative",
+      "title": "Tourism Index (2019 = 100)",
+      "scale": { "domain": [70, 180] },
+      "axis": { "format": ".0f" }
+    },
+    "color": {
+      "field": "State",
+      "type": "nominal",
+      "title": "State/Territory",
+      "scale": {
+        "domain": [
+          "Northern Territory",
+          "Tasmania",
+          "South Australia",
+          "Western Australia",
+          "Queensland",
+          "Victoria",
+          "New South Wales",
+          "Australian Capital Territory"
+        ],
+        "range": [
+          "#e67e22",
+          "#1abc9c",
+          "#f39c12",
+          "#9b59b6",
+          "#2ecc71",
+          "#3498db",
+          "#e74c3c",
+          "#34495e"
+        ]
+      }
+    },
+    "opacity": {
+      "condition": { "param": "stateSelect", "value": 1 },
+      "value": 0.15
+    },
+    "tooltip": [
+      { "field": "State", "type": "nominal", "title": "State/Territory" },
+      { "field": "Year", "type": "ordinal", "title": "Year" },
+      {
+        "field": "Trips_Index",
+        "type": "quantitative",
+        "title": "Recovery Index",
+        "format": ".1f"
+      },
+      {
+        "field": "Daytrip_Trips_Thousands",
+        "type": "quantitative",
+        "title": "Actual Trips (000s)",
+        "format": ",.0f"
+      }
+    ]
+  }
+}
